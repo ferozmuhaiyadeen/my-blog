@@ -62,6 +62,22 @@ app.post('/api/articles/:name/add-comment', (req, res) => {
     }, res);
 });
 
+app.post('/api/register',(req,res) =>{
+    const {firstname,lastname,email,password} = req.body;
+    
+    withDB(async (db) => {
+        await db.collection('Users').insert([{
+            first_name: firstname,
+            last_name: lastname ,
+            email : email,
+            password : password,
+        }]);
+        const addeduser = await db.collection('Users').findOne({email: email});
+
+        res.status(200).json(addeduser);
+    }, res);
+});
+
 app.get('*', (req,res) => {
     res.sendFile(path.join(__dirname + '/build/index.html'));
 })
