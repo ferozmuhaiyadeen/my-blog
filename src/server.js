@@ -106,5 +106,5 @@ app.get('*', (req,res) => {
     res.sendFile(path.join(__dirname + '/build/index.html'));
 })
 
-
-app.listen(8001, () => console.log('Listening on port 8000'));
+const port= process.env.PORT ||8001;
+app.listen(port, () => console.log('Listening on port 8000'));
