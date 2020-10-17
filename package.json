@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "babel-version": "babel --version",
     "start": "npx nodemon --exec npx babel-node src/server.js ",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,6 +22,7 @@
     "@babel/node": "^7.10.5",
     "@babel/preset-env": "^7.11.5",
     "gh-pages": "^3.1.0",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "babel-cli": "^6.6.5"
   }
 }
