@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { MongoClient } from 'mongodb';
 import path from 'path';
+import CryptoJS from 'crypto-js';
 const app = express();
 
 app.use(express.static(path.join(__dirname,'/build')));
@@ -61,16 +62,39 @@ app.post('/api/articles/:name/add-comment', (req, res) => {
         res.status(200).json(updatedArticleInfo);
     }, res);
 });
+/*const hashCode = (s) => {
+    var h = 0, l = s.length, i = 0;
+    if (l > 0)
+        while (i < l)
+            h = (h << 5) - h + s.charCodeAt(i++) | 0;
+    return h;
+};
+*/
 
+app.post('/api/login',(req,res)=> {
+    const {email,password} = req.body;
+    
+    const encryptpassword=CryptoJS.AES.encrypt(password,'Edith@2608').toString;
+    withDB(async (db)=>{
+        const loginuser=await db.collection('Users').findOne({email:email,password:encryptpassword,});
+        res.status(200).json(loginuser);
+    },res);
+    
+
+
+});
 app.post('/api/register',(req,res) =>{
+    
     const {firstname,lastname,email,password} = req.body;
+    
+    const encryptdata=CryptoJS.AES.encrypt(password,'Edith@2608').toString();
     
     withDB(async (db) => {
         await db.collection('Users').insert([{
             first_name: firstname,
             last_name: lastname ,
             email : email,
-            password : password,
+            password : encryptdata,
         }]);
         const addeduser = await db.collection('Users').findOne({email: email});
 
@@ -83,4 +107,4 @@ app.get('*', (req,res) => {
 })
 
 
-app.listen(8000, () => console.log('Listening on port 8000'));
+app.listen(8001, () => console.log('Listening on port 8000'));
